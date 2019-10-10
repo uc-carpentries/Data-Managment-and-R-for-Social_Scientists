@@ -1,5 +1,5 @@
 ---
-title: "Other Resources in OpenRefine"
+title: "Other Resources for OpenRefine"
 teaching: 5
 exercises: 5
 questions:
