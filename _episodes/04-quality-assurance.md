@@ -1,5 +1,5 @@
 ---
-title: "Quality assurance"
+title: "Quality Assurance"
 teaching: 15
 exercises: 10
 questions:
@@ -69,7 +69,7 @@ The value in the data box will say 'between' and `Minimum` and `Maximum` boxes w
 
 Your data table will now not allow you to enter a value that violates
 the data validation rule you have created. To test this out, try 
-to enter a new value into the `num_membrs` column that is not valid.
+to enter a new value into the `no_membrs` column that is not valid.
 The following error box will appear: 
 
 ![Image of error message for inputing invalid data](../fig/error-invalid-data.png)
@@ -141,7 +141,7 @@ If you type a value which is not on the list you will get an error message. This
 > you may have noticed that data validation rules are not applied
 > retroactively to data that is already present in the cell. 
 > This means, for example, that if we had already entered `150`
-> in the `num_membrs` column before applying our data validation
+> in the `no_membrs` column before applying our data validation
 > rule, that cell would not be flagged with a warning. 
 > 
 > When using spreadsheets for data entry, it is a good idea to set up
