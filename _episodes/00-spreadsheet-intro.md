@@ -1,5 +1,5 @@
 ---
-title: "Introduction"
+title: "Introduction to Understanding Data with Spreedsheets"
 teaching: 15
 exercises: 3
 questions:
