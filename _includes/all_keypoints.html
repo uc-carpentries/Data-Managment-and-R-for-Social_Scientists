@@ -3,16 +3,10 @@
 {% endcomment %}
 
 {% include base_path.html %}
-{% include manual_episode_order.html %}
 
 <h2>Key Points</h2>
 <table class="table table-striped">
-{% for lesson_episode in lesson_episodes %}
-  {% if site.episode_order %}
-    {% assign episode = site.episodes | where: "slug", lesson_episode | first %}
-  {% else %}
-    {% assign episode = lesson_episode %}
-  {% endif %}
+{% for episode in site.episodes %}
   {% unless episode.break %}
     <tr>
       <td class="col-md-3">
