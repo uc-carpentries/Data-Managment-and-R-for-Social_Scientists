@@ -1,6 +1,6 @@
 ---
 title: "Formatting Problems"
-teaching: 20
+teaching: 25
 exercises: 0
 questions:
 - "What are some common challenges with formatting data in spreadsheets and how can we avoid them?"

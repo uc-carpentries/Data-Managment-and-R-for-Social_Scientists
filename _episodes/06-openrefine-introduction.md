@@ -1,6 +1,6 @@
 ---
 title: "Introduction to OpenRefine"
-teaching: 10
+teaching: 15
 exercises: 0
 questions:
 - "What is OpenRefine useful for?"

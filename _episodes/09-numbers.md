@@ -1,7 +1,7 @@
 ---
 title: "Examining Numbers in OpenRefine"
-teaching: 10
-exercises: 10
+teaching: 15
+exercises: 15
 questions:
 - "How can we convert a column from one data type to another?"
 - "How can we visualize relationships among columns?"

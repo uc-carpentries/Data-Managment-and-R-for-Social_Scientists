@@ -1,7 +1,7 @@
 ---
 title: "Exporting and Saving Data from OpenRefine"
-teaching: 10
-exercises: 5
+teaching: 15
+exercises: 10
 questions:
 - "How can we save and export our cleaned data from OpenRefine?"
 objectives:

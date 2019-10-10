@@ -1,7 +1,7 @@
 ---
 title: "Introduction to Understanding Data with Spreedsheets"
 teaching: 15
-exercises: 3
+exercises: 5
 questions:
 - "What are basic principles for using spreadsheets for good data organization?"
 objectives:

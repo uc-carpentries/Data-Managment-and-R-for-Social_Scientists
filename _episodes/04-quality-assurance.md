@@ -1,7 +1,7 @@
 ---
 title: "Quality Assurance"
-teaching: 15
-exercises: 10
+teaching: 20
+exercises: 15
 questions:
 - "How can we carry out basic quality assurance in spreadsheets?"
 objectives:

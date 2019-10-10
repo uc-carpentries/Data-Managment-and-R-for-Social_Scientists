@@ -1,7 +1,7 @@
 ---
 title: "Exporting Data"
-teaching: 10
-exercises: 5
+teaching: 15
+exercises: 10
 questions:
 - "How can we export data from spreadsheets in a way that is useful for downstream applications?"
 objectives:

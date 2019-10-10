@@ -1,7 +1,7 @@
 ---
 title: "Before We Start R"
-teaching: 25
-exercises: 15
+teaching: 30
+exercises: 20
 questions:
 - "How to find your way around RStudio?"
 - "How to interact with R?"
