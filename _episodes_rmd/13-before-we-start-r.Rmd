@@ -1,5 +1,5 @@
 ---
-title: "Before We Start"
+title: "Before We Start R"
 teaching: 25
 exercises: 15
 questions:
