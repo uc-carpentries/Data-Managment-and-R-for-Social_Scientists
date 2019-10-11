@@ -2,6 +2,3 @@
 layout: reference
 ---
 
-## Glossary
-
-FIXME
