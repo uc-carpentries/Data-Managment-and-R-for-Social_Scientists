@@ -28,13 +28,7 @@ frame, and a brief introduction to plotting.
 >
 > #### Prerequisites
 >
-> This lesson requires a working copy of **R** and **RStudio**.
+> This lesson requires a spreadsheet program, OpenRefine, and a working copy of **R** and **RStudio**.
 > <br>To most effectively use these materials, please make sure to install
 > everything *before* working through this lesson.
 {: .prereq}
-
-> ## For Instructors
-> If you are teaching this lesson in a workshop, please see the
-> [Instructor notes](guide/).
-{: .prereq}
-
