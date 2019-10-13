@@ -19,7 +19,7 @@ objectives:
 - "Use `summarize`, `group_by`, and `count` to split a data frame into groups of observations, apply a summary statistics for each group, and then combine the results."
 - "Describe the concept of a wide and a long table format and for which purpose those formats are useful."
 - "Describe what key-value pairs are."
-- "Reshape a data frame from long to wide format and back with the `spread` and `gather` commands from the **`tidyr`** package."
+- "Reshape a data frame from long to wide format and back with the `pivot_wider` and `pivot_longer` commands from the **`tidyr`** package."
 - "Export a data frame to a csv file."
 keypoints:
   - "Use the `dplyr` package to manipulate dataframes."
@@ -28,8 +28,8 @@ keypoints:
   - "Use `group_by()` and `summarize()` to work with subsets of data."
   - "Use `mutate()` to create new variables."
   - "Use the `tidyr` package to change the layout of dataframes."
-  - "Use `gather()` to go from wide to long format."
-  - "Use `spread()` to go from long to wide format."
+  - "Use `pivot_longer()` to go from wide to long format."
+  - "Use `pivot_wider()` to go from long to wide format."
 ---
 
 
@@ -440,15 +440,15 @@ interviews %>%
 # Groups:   village [3]
   village  memb_assoc mean_no_membrs
   <chr>    <chr>               <dbl>
-1 Chirodzo <NA>                 5.08
-2 Chirodzo no                   8.06
-3 Chirodzo yes                  7.82
-4 God      <NA>                 6   
-5 God      no                   7.13
-6 God      yes                  8   
-7 Ruaca    <NA>                 6.22
-8 Ruaca    no                   7.18
-9 Ruaca    yes                  9.5 
+1 Chirodzo no                   8.06
+2 Chirodzo yes                  7.82
+3 Chirodzo <NA>                 5.08
+4 God      no                   7.13
+5 God      yes                  8   
+6 God      <NA>                 6   
+7 Ruaca    no                   7.18
+8 Ruaca    yes                  9.5 
+9 Ruaca    <NA>                 6.22
 ~~~
 {: .output}
 
@@ -735,7 +735,7 @@ interviews %>%
 > {: .solution}
 {: .challenge}
 
-## Reshaping with gather and spread
+## Reshaping with pivot_longer and pivot_wider
 
 In the [spreadsheet
 lesson](http://www.datacarpentry.org/spreadsheets-socialsci/), we discussed how
@@ -769,77 +769,79 @@ point here is that we are still following a tidy data structure, but we have
 The opposite transformation would be to transform column names into values of
 a variable.
 
-We can do both these of transformations with two `tidyr` functions, `spread()`
-and `gather()`.
+We can do both these of transformations with two `tidyr` functions, `pivot_wider()`
+and `pivot_longer()`.
 
-#### Spreading
+#### pivot_wider
 
-`spread()` takes three principal arguments:
+`pivot_wider()` takes three principal arguments:
 
 1. the data
-2. the *key* column variable whose values will become new column names.
-3. the *value* column variable whose values will fill the new column variables.
+2. the *names_from* column variable whose values will become new column names.
+3. the *values_from* column variable whose values will fill the new column variables.
 
-Further arguments include `fill` which, if set, fills in missing values with
+Further arguments include `values_fill` which, if set, fills in missing values with
 the value provided.
 
-Let's use `spread()` to transform interviews to create new columns for each type
+Let's use `pivot_wider()` to transform interviews to create new columns for each type
 of wall construction material. We use the pipe as before too. Because both the
-`key` and `value` parameters must come from column values, we will create a
+`names_from` and `values_from` parameters must come from column values, we will create a
 dummy column (we'll name it `wall_type_logical`) to hold the value `TRUE`, which
 we will then place into the appropriate column that corresponds to the wall
 construction material for that respondent. When using `mutate()` if you give a
 single value, it will be used for all observations in the dataset. We will use
-`fill = FALSE` in `spread()` to fill the rest of the new columns for that row
+`values_fill = FALSE` in `pivot_wider()` to fill the rest of the new columns for that row
 with `FALSE`.
 
 
 ~~~
-interviews_spread <- interviews %>%
+interviews_wide <- interviews %>%
     mutate(wall_type_logical = TRUE) %>%
-    spread(key = respondent_wall_type, value = wall_type_logical, fill = FALSE)
+    pivot_wider(names_from = respondent_wall_type,
+                values_from = wall_type_logical,
+                values_fill = list(wall_type_logical = FALSE))
 ~~~
 {: .language-r}
 
-View the `interviews_spread` data frame and notice that there is no longer a
+View the `interviews_wide` data frame and notice that there is no longer a
 column titled `respondent_wall_type`. This is because there is a default
-parameter in `spread()` that drops the original column.
+parameter in `pivot_wider()` that drops the original column.
 
-## Gathering
+#### pivot_longer
 
 The opposing situation could occur if we had been provided with data in the form
-of `interviews_spread`, where the building materials are column names, but we
+of `interviews_wide`, where the building materials are column names, but we
 wish to treat them as values of a `respondent_wall_type` variable instead.
 
-In this situation we are gathering the column names and turning them into a pair
+In this situation we are collecting the column names and turning them into a pair
 of new variables. One variable represents the column names as values, and the
 other variable contains the values previously associated with the column names.
 We will do this in two steps to make this process a bit clearer.
 
-`gather()` takes four principal arguments:
+`pivot_longer()` takes four principal arguments:
 
 1. the data
-2. the *key* column variable we wish to create from column names.
-3. the *value* column variable we wish to create and fill with values
-associated with the key.
-4. the names of the columns we use to fill the key variable (or to drop).
+2. the *cols* that are being pivoted
+3. the *names_to* string specifying the name of the column created from column names.
+4. the *values_to* string specifying the name of the column created from column data.
 
 To recreate our original data frame, we will use the following:
 
-1. the data - `interviews_spread`
-2. the *key* column will be "respondent_wall_type" (as a character string). This
+1. the data - `interviews_wide`
+2. the names of the columns we will use to fill the key variable are
+   `muddaub:cement` (the column named "muddaub" up to and including
+   the column named "cement" as they are ordered in the data frame).
+3. the *names_to* column will be "respondent_wall_type" (as a character string). This
    is the name of the new column we want to create.
-3. the *value* column will be `wall_type_logical`. This will be either `TRUE` or
+4. the *values_to* column will be `wall_type_logical`. This will be either `TRUE` or
    `FALSE`.
-4. the names of the columns we will use to fill the key variable are
-   `burntbricks:sunbricks` (the column named "burntbricks" up to and including
-   the column named "sunbricks" as they are ordered in the data frame).
 
 
 ~~~
-interviews_gather <- interviews_spread %>%
-    gather(key = respondent_wall_type, value = "wall_type_logical",
-           burntbricks:sunbricks)
+interviews_long <- interviews_wide %>%
+    pivot_longer(muddaub:cement,
+                 names_to = "respondent_wall_type",
+                 values_to = "wall_type_logical")
 ~~~
 {: .language-r}
 
@@ -857,21 +859,22 @@ together in the next chunk of code:
 
 
 ~~~
-interviews_gather <- interviews_spread %>%
-    gather(key = "respondent_wall_type", value = "wall_type_logical",
-           burntbricks:sunbricks) %>%
+interviews_long <- interviews_wide %>%
+    pivot_longer(muddaub:cement,
+                 names_to = "respondent_wall_type",
+                 values_to = "wall_type_logical") %>% 
     filter(wall_type_logical) %>%
     select(-wall_type_logical)
 ~~~
 {: .language-r}
 
-View both `interviews_gather` and `interviews_spread` and compare their
-structure. Notice that the rows have been reordered in `interviews_gather` such
-that all of the respondents with a particular wall type are grouped together.
+View both `interviews_long` and `interviews_wide` and compare their
+structure. Also compare `interviews_long` to `interviews`. They should be identical
+now that we have finished cleaning up `wall_type_logical`.
 
-## Applying `spread()` to clean our data
+## Applying `pivot_wider()` to clean our data
 
-Now that we've learned about `gather()` and `spread()` we're going to put these
+Now that we've learned about `pivot_longer()` and `pivot_wider()` we're going to put these
 functions to use to fix a problem with the way that our data is structured. In
 the spreadsheets lesson, we learned that it's best practice to have only a
 single piece of information in each cell of your spreadsheet. In this dataset,
@@ -887,7 +890,9 @@ that interview respondent owned that item.
 interviews_items_owned <- interviews %>%
     separate_rows(items_owned, sep=";") %>%
     mutate(items_owned_logical = TRUE) %>%
-    spread(key = items_owned, value = items_owned_logical, fill = FALSE)
+    pivot_wider(names_from = items_owned,
+                values_from = items_owned_logical,
+                values_fill = list(items_owned_logical = FALSE))
 
 nrow(interviews_items_owned)
 ~~~
@@ -921,27 +926,28 @@ separate_rows(items_owned, sep=";") %>%
 ~~~
 {: .language-r}
 
-Lastly, we use `spread()` to switch from long format to wide format. This
+Lastly, we use `pivot_wider()` to switch from long format to wide format. This
 creates a new column for each of the unique values in the `split_items` column
 and fills those columns with `TRUE` or `FALSE`.
 
 
 ~~~
 mutate(items_owned_logical = TRUE) %>%
-    spread(key = items_owned, value = items_owned_logical, fill = FALSE)
+pivot_wider(names_from = items_owned,
+            values_from = items_owned_logical,
+            values_fill = list(items_owned_logical = FALSE))
 ~~~
 {: .language-r}
 
-View the `interviews_items_owned` data frame. It should have `r
-nrow(interviews)` rows (the same number of rows you had originally), but extra
-columns for each item. 
+View the `interviews_items_owned` data frame. It should have 131 rows (the same
+number of rows you had originally), but extra columns for each item. 
 
-You may notice that the last column in called `\`<NA>\``. This is because the respondents did not own any of the items that was in the interviewer's list. We can use the `rename()` function to change this name to something more meaningful:
+You may notice that one of the columns is called `NA`. This is because the respondents did not own any of the items that was in the interviewer's list. We can use the `rename()` function to change this name to something more meaningful:
 
 
 ~~~
 interviews_items_owned <- interviews_items_owned %>%
-    rename(no_listed_items = `<NA>`)
+    rename(no_listed_items = `NA`)
 ~~~
 {: .language-r}
 
@@ -988,9 +994,9 @@ interviews_items_owned %>%
 # A tibble: 3 x 2
   village  mean_items
   <chr>         <dbl>
-1 Chirodzo       4.54
-2 God            3.98
-3 Ruaca          5.57
+1 Chirodzo      0.821
+2 God           0.651
+3 Ruaca         0.633
 ~~~
 {: .output}
 
@@ -1007,7 +1013,9 @@ interviews_items_owned %>%
 > > interviews_months_lack_food <- interviews %>%
 > >   separate_rows(months_lack_food, sep=";") %>%
 > >   mutate(months_lack_food_logical  = TRUE) %>%
-> >   spread(key = months_lack_food, value = months_lack_food_logical, fill = FALSE)
+> >   pivot_wider(names_from = months_lack_food,
+> >               values_from = months_lack_food_logical,
+> >               values_fill = list(months_lack_food_logical = FALSE))
 > > ~~~
 > > {: .language-r}
 > {: .solution}
@@ -1032,9 +1040,9 @@ interviews_items_owned %>%
 > > # A tibble: 3 x 2
 > >   memb_assoc mean_months
 > >   <chr>            <dbl>
-> > 1 <NA>              2.95
-> > 2 no                2.31
-> > 3 yes               2.64
+> > 1 no                1.73
+> > 2 yes               1.88
+> > 3 <NA>              2.49
 > > ~~~
 > > {: .output}
 > {: .solution}
@@ -1060,21 +1068,25 @@ re-generate them.
 
 In preparation for our next lesson on plotting, we are going to create a
 version of the dataset where each of the columns includes only one
-data value. To do this, we will use spread to expand the
+data value. To do this, we will use pivot_wider to expand the
 `months_lack_food` and `items_owned` columns. We will also create a couple of summary columns.
 
 
 ~~~
 interviews_plotting <- interviews %>%
-    ## spread data by items_owned
+    ## pivot data by items_owned
     separate_rows(items_owned, sep=";") %>%
     mutate(items_owned_logical = TRUE) %>%
-    spread(key = items_owned, value = items_owned_logical, fill = FALSE) %>%
-    rename(no_listed_items = `<NA>`) %>%
-    ## spread data by months_lack_food
+    pivot_wider(names_from = items_owned,
+                values_from = items_owned_logical,
+                values_fill = list(items_owned_logical=FALSE)) %>%
+    rename(no_listed_items = `NA`) %>%
+    ## pivot data by months_lack_food
     separate_rows(months_lack_food, sep=";") %>%
     mutate(months_lack_food_logical = TRUE) %>%
-    spread(key = months_lack_food, value = months_lack_food_logical, fill = FALSE) %>%
+    pivot_wider(names_from = months_lack_food,
+                values_from = months_lack_food_logical,
+                values_fill = list(months_lack_food_logical = FALSE)) %>%
     ## add some summary columns
     mutate(number_months_lack_food = rowSums(select(., Apr:Sept))) %>%
     mutate(number_items = rowSums(select(., bicycle:television)))
