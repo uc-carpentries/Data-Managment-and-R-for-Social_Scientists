@@ -151,20 +151,19 @@ Each will appear as:
 You can use whatever method you prefer, but *be consistent*. This maintains the
 readability of your code.
 
-You can make a numbered list by just using numbers. You can even use the
-same number over and over if you want:
+You can make a numbered list by using numbers.
 
 ```
 1. bold with double-asterisks
-1. italics with underscores
-1. code-type font with backticks
+2. italics with underscores
+3. code-type font with backticks
 ```
 
 This will appear as:
 
 1. bold with double-asterisks
-1. italics with underscores
-1. code-type font with backticks
+2. italics with underscores
+3. code-type font with backticks
 
 You can make section headers of different sizes by initiating a line
 with some number of `#` symbols:
@@ -179,14 +178,14 @@ with some number of `#` symbols:
 You _compile_ the R Markdown document to an html webpage by clicking
 the "Knit" button in the upper-left.
 
-> ## Challenge 1
+> ## Exercise 1
 >
 > Create a new R Markdown document. Delete all of the R code chunks
 > and write a bit of Markdown (some sections, some italicized
 > text, and an itemized list).
 >
 > Convert the document to a webpage.
-> > ## Solution to Challenge 1
+> > ## Solution to Exercise 1
 > >
 > > In RStudio, select File > New file > R Markdown... 
 > > 
@@ -197,14 +196,14 @@ the "Knit" button in the upper-left.
 > > 
 > > ## Background on Data
 > > 
-> > This report uses the *gapminder* dataset, which has columns that include:
+> > This report uses the *SAFI* dataset, which has columns that include:
 > > 
-> > * country
-> > * continent
-> > * year
-> > * lifeExp
-> > * pop
-> > * gdpPercap
+> > * key_id
+> > * village
+> > * interview_date
+> > * no_membrs
+> > * years_liv
+> > * respondent_wall_type
 > > 
 > > ## Background on Methods
 > > 
@@ -222,16 +221,8 @@ You can make a hyperlink like this:
 
 You can include an image file like this: `![caption](http://url/for/file)`
 
-You can do subscripts (e.g., F~2~) with `F~2~` and superscripts (e.g.,
-F^2^) with `F^2^`.
-
 If you know how to write equations in
-[LaTeX](http://www.latex-project.org/), you can use `$ $` and `$$ $$` to insert math equations, like
-`$E = mc^2$` and
-
-```
-$$y = \mu + \sum_{i=1}^p \beta_i x_i + \epsilon$$
-```
+[LaTeX](http://www.latex-project.org/), you can use `$ $` and `$$ $$` to insert math equations.
 
 You can review Markdown syntax by navigating to the
 "Markdown Quick Reference" under the "Help" field in the 
@@ -248,7 +239,7 @@ The main code chunks look like this:
 
 <pre>
 &#96;&#96;&#96;{r load_data}
-gapminder <- read.csv("gapminder.csv")
+interviews <- read_csv("data/SAFI_clean.csv", na = "NULL")
 &#96;&#96;&#96;
 </pre>
 
@@ -258,31 +249,32 @@ a unique name, as they will help you to fix errors and, if any graphs are
 produced, the file names are based on the name of the code chunk that
 produced them.
 
-> ## Challenge 2
+> ## Exercise 2
 >
 > Add code chunks to:
 >
-> * Load the ggplot2 package
-> * Read the gapminder data
+> * Load the tidyverse package
+> * Read the SAFI data
 > * Create a plot
 > 
-> > ## Solution to Challenge 2
+> > ## Solution to Exercise 2
 > > 
 > > <pre>
-> > &#96;&#96;&#96;{r load-ggplot2}
-> > library("ggplot2")
+> > &#96;&#96;&#96;{r load-tidyverse}
+> > library(tidyverse)
 > > &#96;&#96;&#96;
 > > </pre>
 > > 
 > > <pre>
-> > &#96;&#96;&#96;{r read-gapminder-data}
-> > gapminder <- read.csv("gapminder.csv")
+> > &#96;&#96;&#96;{r read-safi-data}
+> > interviews_plotting <- read_csv("data_output/interviews_plotting.csv")
 > > &#96;&#96;&#96;
 > > </pre>
 > > 
 > > <pre>
 > > &#96;&#96;&#96;{r make-plot}
-> > plot(lifeExp ~ year, data = gapminder)
+> > ggplot(data = interviews_plotting, aes(x = no_membrs, y = number_items)) +
+> >    geom_point()
 > > &#96;&#96;&#96;
 > > </pre>
 > > 
@@ -354,8 +346,7 @@ So you might write:
 
 <pre>
 &#96;&#96;&#96;{r load_libraries, echo=FALSE, message=FALSE}
-library("dplyr")
-library("ggplot2")
+library(tidyverse)
 &#96;&#96;&#96;
 </pre>
 
@@ -364,30 +355,31 @@ repeatedly; for this, you can set _global_ chunk options, like so:
 
 <pre>
 &#96;&#96;&#96;{r global_options, echo=FALSE}
-knitr::opts_chunk$set(fig.path="Figs/", message=FALSE, warning=FALSE,
+knitr::opts_chunk$set(fig.path="fig_output/", message=FALSE, warning=FALSE,
                       echo=FALSE, results="hide", fig.width=11)
 &#96;&#96;&#96;
 </pre>
 
 The `fig.path` option defines where the figures will be saved. The `/`
 here is really important; without it, the figures would be saved in
-the standard place but just with names that begin with `Figs`.
+the standard place but just with names that begin with `fig_output`.
 
 If you have multiple R Markdown files in a common directory, you might
 want to use `fig.path` to define separate prefixes for the figure file
 names, like `fig.path="Figs/cleaning-"` and `fig.path="Figs/analysis-"`.
 
 
-> ## Challenge 3
+> ## Exercise 3
 >
 > Use chunk options to control the size of a figure and to hide the
 > code.
 > 
-> > ## Solution to Challenge 3
+> > ## Solution to Exercise 3
 > > 
 > > <pre>
 > > &#96;&#96;&#96;{r echo = FALSE, fig.width = 3}
-> > plot(faithful)
+> > ggplot(data = interviews_plotting, aes(x = no_membrs, y = number_items)) +
+> >    geom_point()
 > > &#96;&#96;&#96;
 > > </pre>
 > > 
@@ -412,19 +404,11 @@ Perhaps precede the paragraph with a larger code chunk that does
 calculations and defines variables, with `include=FALSE` for that larger
 chunk (which is the same as `echo=FALSE` and `results="hide"`).
 
-Rounding can produce differences in output in such situations. You may want
-`2.0`, but `round(2.03, 1)` will give just `2`.
-
-The
-[`myround`](https://github.com/kbroman/broman/blob/master/R/myround.R)
-function in the [R/broman](https://github.com/kbroman/broman) package handles
-this.
-
-> ## Challenge 4
+> ## Exercise 4
 >
 > Try out a bit of in-line R code.
 > 
-> > ## Solution to Challenge 4
+> > ## Solution to Exercise 4
 > > 
 > > Here's some inline code to determine that 2 + 2 = `` `r
 > > 2+2` ``.
@@ -449,6 +433,15 @@ of the file.
 > - [TeX installers for macOS](https://tug.org/mactex).
 {: .callout}
 
+> ## Exercise 5
+>
+> Finish up by creating your own report!
+> Make sure you are loading the data, then add a plot.
+> Either improve one of the plots generated in the ggplot section or create a
+> beautiful graph of your own. Use the RStudio [**`ggplot2`** cheat sheet](https://www.rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf)
+> for inspiration.
+> Add some markdown text explaining how to interpret your plot and knit it as an html document.
+{: .challenge}
 
 
 ## Resources

@@ -621,7 +621,7 @@ interviews %>%
 
 > ## Exercise
 >
-> 1. How many households in the survey have an average of
+> How many households in the survey have an average of
 > two meals per day? Three meals per day? Are there any other numbers
 > of meals represented?
 >
@@ -646,7 +646,7 @@ interviews %>%
 > > {: .output}
 > {: .solution}
 >
-> 2. Use `group_by()` and `summarize()` to find the mean, min, and max
+> Use `group_by()` and `summarize()` to find the mean, min, and max
 > number of household members for each village. Also add the number of
 > observations (hint: see `?n`).
 >
@@ -678,7 +678,7 @@ interviews %>%
 > > {: .output}
 > {: .solution}
 >
-> 3. What was the largest household interviewed in each month?
+> What was the largest household interviewed in each month?
 >
 > > ## Solution
 > >
@@ -1002,7 +1002,7 @@ interviews_items_owned %>%
 
 > ## Exercise
 >
-> 1. Create a new data frame (named `interviews_months_lack_food`) that has one
+> Create a new data frame (named `interviews_months_lack_food`) that has one
 > column for each month and records `TRUE` or `FALSE` for whether each interview
 > respondent was lacking food in that month.
 >
@@ -1020,7 +1020,7 @@ interviews_items_owned %>%
 > > {: .language-r}
 > {: .solution}
 >
-> 2. How many months (on average) were respondents without food if
+> How many months (on average) were respondents without food if
 > they did belong to an irrigation association? What about if they didn't?
 >
 > > ## Solution
